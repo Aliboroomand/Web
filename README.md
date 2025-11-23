@@ -1,1 +1,1015 @@
-# Web
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>سایت ترفندهای اکسل - کامل و پیشرفته</title>
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+  
+  <!-- SEO بهبود -->
+  <meta name="description" content="آموزش ترفندهای اکسل - فرمول‌های مالی، متنی، منطقی، آرایه‌ای و پیشرفته با مثال‌های عملی و ابزارهای کمکی">
+  <meta name="keywords" content="اکسل, آموزش اکسل, فرمول اکسل, ترفند اکسل, مالی, متنی, منطقی, آرایه‌ای, VBA">
+  <meta name="author" content="علی برومند">
+  
+  <style>
+    /* فونت وزیر */
+    body {
+      font-family: 'Vazir', Tahoma, sans-serif;
+      direction: rtl;
+      margin: 0;
+      padding: 0;
+      background: #f9fbfc;
+      color: #222;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* حالت تاریک */
+    body.dark-mode {
+      background: #1a1a1a;
+      color: #ffffff;
+    }
+
+    body.dark-mode main {
+      background: #2d2d2d;
+    }
+
+    body.dark-mode .formula {
+      background: #3a3a3a;
+      border-color: #555;
+      color: #fff;
+    }
+
+    header {
+      background-color: #005ea3;
+      color: white;
+      padding: 16px 24px;
+      font-weight: 700;
+      font-size: 28px;
+      text-align: center;
+      box-shadow: 0 3px 8px rgb(0 94 163 / 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .theme-toggle, .bookmarks-toggle {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background-color 0.3s ease;
+    }
+
+    .theme-toggle:hover, .bookmarks-toggle:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    nav {
+      background: #0078d7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+      padding: 8px 0;
+      box-shadow: 0 3px 8px rgb(0 94 163 / 0.25);
+      user-select: none;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav a, nav button {
+      color: white;
+      font-weight: 600;
+      font-size: 17px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 10px 18px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    nav a:hover, nav button:hover {
+      background-color: #005ea3;
+    }
+
+    /* باکس جستجو */
+    .search-box {
+      margin: 20px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 80%;
+      max-width: 400px;
+      padding: 12px 16px;
+      font-size: 16px;
+      border: 2px solid #0078d7;
+      border-radius: 25px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .search-box input:focus {
+      border-color: #005ea3;
+    }
+
+    .search-history {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 400px;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .dark-mode .search-history {
+      background: #2d2d2d;
+      border-color: #555;
+    }
+
+    .search-history.show {
+      display: block;
+    }
+
+    .search-history div {
+      padding: 10px 15px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dark-mode .search-history div {
+      border-bottom-color: #444;
+    }
+
+    .search-history div:hover {
+      background: #f5f5f5;
+    }
+
+    .dark-mode .search-history div:hover {
+      background: #3a3a3a;
+    }
+
+    .search-history div:last-child {
+      border-bottom: none;
+    }
+
+    /* منوی کشویی ترفندها */
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 6px 15px rgb(0 94 163 / 0.2);
+      display: none;
+      min-width: 180px;
+      z-index: 1100;
+      user-select: auto;
+    }
+
+    .dark-mode .dropdown {
+      background: #2d2d2d;
+    }
+
+    .dropdown.show {
+      display: block;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 12px 16px;
+      color: #005ea3;
+      font-weight: 500;
+      border-bottom: 1px solid #e6eaf0;
+      text-align: right;
+      transition: background-color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .dark-mode .dropdown a {
+      color: #4da8ff;
+      border-bottom-color: #444;
+    }
+
+    .dropdown a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown a:hover {
+      background-color: #e3f0fe;
+    }
+
+    .dark-mode .dropdown a:hover {
+      background-color: #3a3a3a;
+    }
+
+    /* کانتینر اصلی */
+    main {
+      flex-grow: 1;
+      max-width: 1000px;
+      margin: 35px auto 50px;
+      background: white;
+      padding: 28px 32px 36px;
+      border-radius: 10px;
+      box-shadow: 0 4px 25px rgb(0 94 163 / 0.1);
+      min-height: 65vh;
+      outline-offset: 3px;
+      transition: background-color 0.3s ease;
+    }
+
+    section {
+      display: none;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    /* فرمول‌ها */
+    .formula-container {
+      margin-bottom: 25px;
+      border: 1px solid #e1e5e9;
+      border-radius: 8px;
+      padding: 15px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    .formula-container:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .bookmark-btn {
+      position: absolute;
+      left: 15px;
+      top: 15px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+
+    .bookmark-btn:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .bookmark-btn.bookmarked {
+      opacity: 1;
+      color: #ffd700;
+    }
+
+    .formula {
+      background: #eef6fb;
+      border: 1.6px solid #b2d4f1;
+      padding: 13px 18px;
+      margin: 16px 0 8px;
+      font-family: monospace;
+      font-size: 18px;
+      border-radius: 7px;
+      user-select: all;
+      direction: ltr;
+      color: #004b8d;
+      box-shadow: inset 0 0 4px #a6c9e8;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+      margin-right: 30px;
+    }
+
+    .formula:hover {
+      background: #e1f0fd;
+    }
+
+    .copy-btn {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .formula:hover .copy-btn {
+      opacity: 1;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #0078d7;
+      color: white;
+      border: none;
+      padding: 9px 20px;
+      margin: 8px 5px 8px 0;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 15px;
+      user-select: none;
+      transition: background-color 0.25s ease;
+      font-weight: 600;
+    }
+
+    .btn:hover {
+      background: #005ea3;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+    }
+
+    .btn-secondary:hover {
+      background: #545b62;
+    }
+
+    .btn-success {
+      background: #28a745;
+    }
+
+    .btn-success:hover {
+      background: #218838;
+    }
+
+    .btn-warning {
+      background: #ffc107;
+      color: #212529;
+    }
+
+    .btn-warning:hover {
+      background: #e0a800;
+    }
+
+    .desc {
+      display: none;
+      margin-bottom: 15px;
+      padding: 14px 20px;
+      background: #e7f0fe;
+      border-left: 6px solid #0078d7;
+      font-size: 16px;
+      color: #1e3e6e;
+      border-radius: 0 7px 7px 0;
+      line-height: 1.5;
+      user-select: text;
+    }
+
+    .dark-mode .desc {
+      background: #3a3a3a;
+      color: #ccc;
+    }
+
+    /* مثال‌های عملی */
+    .example {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+
+    .dark-mode .example {
+      background: #4a3c1a;
+      border-color: #665a32;
+    }
+
+    .example h4 {
+      margin: 0 0 8px 0;
+      color: #856404;
+    }
+
+    .dark-mode .example h4 {
+      color: #ffd351;
+    }
+
+    /* سیستم امتیازدهی */
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+
+    .stars {
+      color: #ffc107;
+      cursor: pointer;
+    }
+
+    .stars:hover {
+      color: #ffd700;
+    }
+
+    /* بخش دانلود */
+    .download {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .download a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .download a:hover {
+      background: #218838;
+    }
+
+    /* ابزارهای ویژه */
+    .tool-section {
+      background: #f8f9fa;
+      border: 2px solid #dee2e6;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 25px 0;
+    }
+
+    .dark-mode .tool-section {
+      background: #2d2d2d;
+      border-color: #444;
+    }
+
+    .tool-section h3 {
+      color: #005ea3;
+      margin-top: 0;
+      border-bottom: 2px solid #0078d7;
+      padding-bottom: 10px;
+    }
+
+    .dark-mode .tool-section h3 {
+      color: #4da8ff;
+      border-bottom-color: #4da8ff;
+    }
+
+    .calculator input, .formula-builder select, .formula-builder input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-family: 'Vazir', monospace;
+    }
+
+    .dark-mode .calculator input, 
+    .dark-mode .formula-builder select, 
+    .dark-mode .formula-builder input {
+      background: #3a3a3a;
+      border-color: #555;
+      color: #fff;
+    }
+
+    .quiz-btn {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      background: #e9ecef;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .dark-mode .quiz-btn {
+      background: #3a3a3a;
+      border-color: #555;
+      color: #fff;
+    }
+
+    .quiz-btn:hover {
+      background: #dae0e5;
+    }
+
+    .dark-mode .quiz-btn:hover {
+      background: #4a4a4a;
+    }
+
+    .quiz-btn.correct {
+      background: #d4edda;
+      border-color: #c3e6cb;
+    }
+
+    .quiz-btn.incorrect {
+      background: #f8d7da;
+      border-color: #f5c6cb;
+    }
+
+    .video-placeholder {
+      background: #e9ecef;
+      border: 2px dashed #6c757d;
+      border-radius: 8px;
+      padding: 40px 20px;
+      text-align: center;
+      color: #6c757d;
+    }
+
+    .dark-mode .video-placeholder {
+      background: #3a3a3a;
+      border-color: #555;
+      color: #ccc;
+    }
+
+    .challenge {
+      background: #e7f3ff;
+      border: 2px solid #b3d9ff;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .dark-mode .challenge {
+      background: #2a3a4a;
+      border-color: #3a5a7a;
+    }
+
+    /* نشان‌ها */
+    .bookmarks-panel {
+      position: fixed;
+      top: 0;
+      left: -400px;
+      width: 380px;
+      height: 100vh;
+      background: white;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      transition: left 0.3s ease;
+      z-index: 2000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .dark-mode .bookmarks-panel {
+      background: #2d2d2d;
+    }
+
+    .bookmarks-panel.show {
+      left: 0;
+    }
+
+    .bookmarks-panel h3 {
+      color: #005ea3;
+      border-bottom: 2px solid #0078d7;
+      padding-bottom: 10px;
+    }
+
+    .dark-mode .bookmarks-panel h3 {
+      color: #4da8ff;
+      border-bottom-color: #4da8ff;
+    }
+
+    .bookmark-item {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 12px;
+      margin: 8px 0;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .dark-mode .bookmark-item {
+      background: #3a3a3a;
+      border-color: #555;
+    }
+
+    .bookmark-item:hover {
+      background: #e9ecef;
+    }
+
+    .dark-mode .bookmark-item:hover {
+      background: #4a4a4a;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      z-index: 1999;
+    }
+
+    .overlay.show {
+      display: block;
+    }
+
+    /* درباره ما و تماس با ما */
+    #about p, #home p {
+      font-size: 17px;
+      line-height: 1.65;
+      color: #2b2b2b;
+      margin-bottom: 15px;
+    }
+
+    .dark-mode #about p,
+    .dark-mode #home p {
+      color: #ccc;
+    }
+
+    #home {
+      min-height: 60vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-weight: 600;
+      font-size: 20px;
+      color: #005ea3;
+      padding: 0 16px;
+      user-select: none;
+    }
+
+    .dark-mode #home {
+      color: #4da8ff;
+    }
+
+    #home h2 {
+      font-size: 34px;
+      margin-bottom: 22px;
+      font-weight: 800;
+    }
+
+    /* فرم تماس */
+    form label {
+      display: block;
+      margin-top: 16px;
+      font-weight: 700;
+      font-size: 16px;
+      color: #005ea3;
+      user-select: text;
+    }
+
+    .dark-mode form label {
+      color: #4da8ff;
+    }
+
+    form input[type="text"], form textarea {
+      width: 100%;
+      padding: 11px 14px;
+      margin-top: 6px;
+      font-size: 16px;
+      font-family: Vazir, Tahoma, sans-serif;
+      border-radius: 8px;
+      border: 1.3px solid #c0c8d7;
+      resize: vertical;
+      color: #222;
+      user-select: text;
+      box-sizing: border-box;
+      outline-offset: 3px;
+      outline-color: #0078d7;
+      transition: border-color 0.25s ease;
+      background: white;
+    }
+
+    .dark-mode form input[type="text"],
+    .dark-mode form textarea {
+      background: #3a3a3a;
+      border-color: #555;
+      color: #fff;
+    }
+
+    form input[type="text"]:focus, form textarea:focus {
+      border-color: #005ea3;
+    }
+
+    form textarea {
+      min-height: 110px;
+    }
+
+    form button {
+      margin-top: 24px;
+      background: #0078d7;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+      padding: 14px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 0 8px rgb(0 94 163 / 0.3);
+    }
+
+    form button:hover {
+      background: #005ea3;
+    }
+
+    #formResponse {
+      margin-top: 20px;
+      font-size: 17px;
+      color: green;
+      min-height: 26px;
+      user-select: text;
+    }
+
+    /* فوتر */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #f8f9fa;
+      border-top: 1px solid #dee2e6;
+      margin-top: 40px;
+    }
+
+    .dark-mode footer {
+      background: #2d2d2d;
+      border-top-color: #444;
+    }
+
+    /* مخفی کردن آیتم‌های فیلتر شده */
+    .hidden {
+      display: none !important;
+    }
+
+    /* پیشنهادات هوشمند */
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .suggestion-tag {
+      background: #e3f2fd;
+      border: 1px solid #bbdefb;
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dark-mode .suggestion-tag {
+      background: #2a3a4a;
+      border-color: #3a5a7a;
+    }
+
+    .suggestion-tag:hover {
+      background: #bbdefb;
+      transform: translateY(-1px);
+    }
+
+    .dark-mode .suggestion-tag:hover {
+      background: #3a5a7a;
+    }
+  </style>
+</head>
+<body>
+
+<!-- پنل نشان‌ها -->
+<div class="overlay" id="overlay"></div>
+<div class="bookmarks-panel" id="bookmarksPanel">
+  <h3>📑 فرمول‌های نشان شده</h3>
+  <div id="bookmarksList"></div>
+  <button class="btn" onclick="clearBookmarks()" style="margin-top: 20px; width: 100%;">پاک کردن همه نشان‌ها</button>
+</div>
+
+<header>
+  <span>سایت ترفندهای اکسل</span>
+  <div class="header-controls">
+    <button class="bookmarks-toggle" onclick="toggleBookmarks()">📑</button>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+  </div>
+</header>
+
+<nav>
+  <a href="#home" class="nav-link">خانه</a>
+  <button id="tipsBtn" aria-haspopup="true" aria-expanded="false">ترفندها ▼</button>
+  <a href="#tools" class="nav-link">ابزارها</a>
+  <a href="#quiz" class="nav-link">آزمون</a>
+  <a href="#about" class="nav-link">درباره ما</a>
+  <a href="#contact" class="nav-link">تماس با ما</a>
+
+  <div id="tipsDropdown" class="dropdown" role="menu" aria-label="دسته بندی ترفندها">
+    <a href="#tips-financial" class="dropdown-link" role="menuitem">مالی</a>
+    <a href="#tips-text" class="dropdown-link" role="menuitem">متنی</a>
+    <a href="#tips-logical" class="dropdown-link" role="menuitem">منطقی</a>
+    <a href="#tips-date" class="dropdown-link" role="menuitem">تاریخ و زمان</a>
+    <a href="#tips-lookup" class="dropdown-link" role="menuitem">جستجو و مرجع</a>
+    <a href="#tips-array" class="dropdown-link" role="menuitem">آرایه‌ای</a>
+    <a href="#tips-engineering" class="dropdown-link" role="menuitem">مهندسی</a>
+  </div>
+</nav>
+
+<main>
+  <!-- باکس جستجو -->
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="جستجوی ترفندها... (مثلاً: SUM, IF, VLOOKUP)" onfocus="showSearchHistory()">
+    <div class="search-history" id="searchHistory"></div>
+  </div>
+
+  <!-- پیشنهادات هوشمند -->
+  <div class="suggestions" id="suggestions">
+    <div class="suggestion-tag" onclick="searchThis('VLOOKUP')">VLOOKUP</div>
+    <div class="suggestion-tag" onclick="searchThis('SUMIF')">SUMIF</div>
+    <div class="suggestion-tag" onclick="searchThis('INDEX')">INDEX</div>
+    <div class="suggestion-tag" onclick="searchThis('MATCH')">MATCH</div>
+    <div class="suggestion-tag" onclick="searchThis('FILTER')">FILTER</div>
+    <div class="suggestion-tag" onclick="searchThis('XLOOKUP')">XLOOKUP</div>
+  </div>
+
+  <section id="home" class="active" tabindex="0" aria-label="صفحه خانه">
+    <div>
+      <h2>خوش آمدید به سایت ترفندهای اکسل</h2>
+      <p>این سایت برای شما طراحی شده تا با ترفندهای کاربردی و مفید اکسل آشنا شوید و مهارت‌های خود را در این نرم‌افزار قدرتمند بهبود دهید.</p>
+      <p>ما سعی کرده‌ایم ترفندها را به صورت دسته‌بندی شده و با توضیحات ساده ارائه کنیم تا استفاده از آنها برای همه آسان باشد.</p>
+      <p>برای شروع روی منوی «ترفندها» کلیک کنید و دسته‌بندی مورد علاقه خود را انتخاب نمایید.</p>
+      
+      <!-- بخش دانلود -->
+      <div class="download">
+        <a href="javascript:void(0)" onclick="downloadSample()">
+          📥 دانلود فایل نمونه اکسل
+        </a>
+      </div>
+
+      <!-- چالش هفتگی -->
+      <div class="tool-section">
+        <h3>🏆 چالش هفتگی</h3>
+        <div class="challenge">
+          <p><strong>چالش این هفته:</strong> چگونه می‌توان میانگین 10 سلول را بدون استفاده از تابع AVERAGE محاسبه کرد؟</p>
+          <button class="btn btn-warning" onclick="showChallengeSolution()">نمایش راه‌حل</button>
+          <div id="challengeSolution" style="display: none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+            <p><strong>راه‌حل:</strong> از فرمول <code>=SUM(A1:A10)/COUNT(A1:A10)</code> استفاده کنید.</p>
+            <p>این فرمول مجموع سلول‌ها را بر تعداد آنها تقسیم می‌کند.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ابزارهای ویژه -->
+  <section id="tools" tabindex="0" aria-label="ابزارهای ویژه">
+    <h2>🛠️ ابزارهای ویژه</h2>
+
+    <!-- ماشین حساب فرمول‌ها -->
+    <div class="tool-section">
+      <h3>🧮 ماشین حساب فرمول‌ها</h3>
+      <div class="calculator">
+        <input type="text" id="formulaInput" placeholder="مثال: 5+3*2 یا SUM(10,20,30)" dir="ltr">
+        <button class="btn" onclick="calculateFormula()">محاسبه</button>
+        <div id="calcResult" style="margin-top: 15px; padding: 10px; background: #e9ecef; border-radius: 5px; font-family: monospace;"></div>
+      </div>
+    </div>
+
+    <!-- فرمول‌ساز هوشمند -->
+    <div class="tool-section">
+      <h3>🔧 فرمول‌ساز هوشمند</h3>
+      <div class="formula-builder">
+        <select id="functionType" onchange="updateBuilderOptions()">
+          <option value="">-- انتخاب نوع تابع --</option>
+          <option value="math">ریاضی</option>
+          <option value="text">متنی</option>
+          <option value="logical">منطقی</option>
+          <option value="date">تاریخ و زمان</option>
+        </select>
+        <div id="builderOptions" style="margin: 15px 0;"></div>
+        <button class="btn btn-success" onclick="generateFormula()">ساخت فرمول</button>
+        <div id="builderResult" style="margin-top: 15px;"></div>
+      </div>
+    </div>
+
+    <!-- آموزش تصویری -->
+    <div class="tool-section">
+      <h3>🎬 آموزش تصویری</h3>
+      <div class="video-placeholder">
+        <p>🎥 آموزش‌های ویدیویی به زودی اضافه خواهند شد...</p>
+        <p style="font-size: 14px; margin-top: 10px;">آموزش نحوه استفاده از فرمول‌های پیشرفته در اکسل</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- آزمون و کوئیز -->
+  <section id="quiz" tabindex="0" aria-label="آزمون و کوئیز">
+    <h2>📝 آزمون دانش اکسل</h2>
+
+    <div class="tool-section">
+      <h3>🧪 آزمون سریع</h3>
+      <div class="quiz">
+        <div class="question">
+          <p><strong>سوال 1:</strong> خروجی فرمول <code>=SUM(5,3,2)</code> چیست؟</p>
+          <button class="quiz-btn" onclick="checkAnswer(1, 10, this)">10</button>
+          <button class="quiz-btn" onclick="checkAnswer(1, 8, this)">8</button>
+          <button class="quiz-btn" onclick="checkAnswer(1, 15, this)">15</button>
+        </div>
+
+        <div class="question">
+          <p><strong>سوال 2:</strong> کدام تابع برای جستجوی عمودی استفاده می‌شود؟</p>
+          <button class="quiz-btn" onclick="checkAnswer(2, 'HLOOKUP', this)">HLOOKUP</button>
+          <button class="quiz-btn" onclick="checkAnswer(2, 'VLOOKUP', this)">VLOOKUP</button>
+          <button class="quiz-btn" onclick="checkAnswer(2, 'XLOOKUP', this)">XLOOKUP</button>
+        </div>
+
+        <div class="question">
+          <p><strong>سوال 3:</strong> فرمول <code>=IF(A1>10, "بزرگ", "کوچک")</code> چه کاری انجام می‌دهد؟</p>
+          <button class="quiz-btn" onclick="checkAnswer(3, 'مقایسه مقدار', this)">مقایسه مقدار</button>
+          <button class="quiz-btn" onclick="checkAnswer(3, 'جمع اعداد', this)">جمع اعداد</button>
+          <button class="quiz-btn" onclick="checkAnswer(3, 'اتصال متن', this)">اتصال متن</button>
+        </div>
+      </div>
+
+      <div id="quizResult" style="margin-top: 20px; text-align: center; font-size: 18px; font-weight: bold;"></div>
+      <button class="btn" onclick="resetQuiz()" style="margin-top: 15px; display: none;" id="resetQuizBtn">آزمون مجدد</button>
+    </div>
+  </section>
+
+  <!-- مالی -->
+  <section id="tips-financial" tabindex="0" aria-label="ترفندهای مالی">
+    <h2>💰 ترفندهای مالی</h2>
+    
+    <div class="formula-container">
+      <button class="bookmark-btn" onclick="toggleBookmark(this)">🔖</button>
+      <div class="formula" onclick="copyFormula(this)">
+        =SUM(A1:A10)
+        <span class="copy-btn">کپی</span>
+      </div>
+      <button class="btn" onclick="toggleDesc(this)">نمایش توضیحات</button>
+      <button class="btn btn-secondary" onclick="rateFormula(this)">امتیاز دهید</button>
+      <div class="desc">
+        جمع مقادیر محدوده A1 تا A10 را محاسبه می‌کند.
+      </div>
+      <div class="rating">
+        <span>امتیاز: </span>
+        <span class="stars" onclick="rateItem(this)">★★★★★</span>
+        <span>(15 رای)</span>
+      </div>
+      <div class="example">
+        <h4>مثال عملی:</h4>
+        <p>برای محاسبه مجموع فروش ماه: <code>=SUM(B2:B31)</code></p>
+      </div>
+    </div>
+
+    <div class="formula-container">
+      <button class="bookmark-btn" onclick="toggleBookmark(this)">🔖</button>
+      <div class="formula" onclick="copyFormula(this)">
+        =PMT(نرخ_سود, دوره‌ها, مبلغ_وام)
+        <span class="copy-btn">کپی</span>
+      </div>
+      <button class="btn" onclick="toggleDesc(this)">نمایش توضیحات</button>
+      <button class="btn btn-secondary" onclick="rateFormula(this)">امتیاز دهید</button>
+      <div class="desc">
+        مبلغ پرداخت قسط وام را بر اساس نرخ سود، تعداد دوره‌ها و مبلغ وام محاسبه می‌کند.
+      </div>
+      <div class="rating">
+        <span>امتیاز: </span>
+        <span class="stars" onclick="rateItem(this)">★★★★★</span>
+        <span>(8 رای)</span>
+      </div>
+    </div>
+
+    <div class="formula-container">
+      <button class="bookmark-btn" onclick="toggleBookmark(this)">🔖</button>
+      <div class="formula" onclick="copyFormula(this)">
+        =FV(نرخ_سود, دوره‌ها, پرداخت, [مبلغ_اولیه])
+        <span class="copy-btn">کپی</span>
+      </div>
+      <button class="btn" onclick="toggleDesc(this)">نمایش توضیحات</button>
+      <div class="desc">
+        ارزش آینده یک سرمایه‌گذاری با نرخ سود، تعداد دوره‌ها و پرداخت‌های مشخص را محاسبه می‌کند.
+      </div>
+    </div>
+
+    <div class="formula-container">
+      <button class="bookmark-btn" onclick="toggleBookmark(this)">🔖</button>
+      <div class="formula" onclick="copyFormula(this)">
+        =NPV(نرخ_تنزیل, جریان_نقد
